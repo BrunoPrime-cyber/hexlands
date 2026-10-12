@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#060a11">
+  <script>try { document.documentElement.dataset.theme = localStorage.getItem('hexlands.theme') || 'holo'; document.documentElement.dataset.fx = localStorage.getItem('hexlands.fx') === 'off' ? 'calm' : 'max'; } catch (e) { document.documentElement.dataset.theme = 'holo'; document.documentElement.dataset.fx = 'max'; }</script>
+  <title>Hexlands</title>
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="holo.css">
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <filter id="chromaA" x="-3%" y="-3%" width="106%" height="106%" color-interpolation-filters="sRGB">
+        <feColorMatrix in="SourceGraphic" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="r"/>
+        <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="g"/>
+        <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="b"/>
+        <feOffset in="r" dx="-2" dy="0" result="r2"/>
+        <feOffset in="b" dx="2" dy="0" result="b2"/>
+        <feBlend in="r2" in2="g" mode="screen" result="rg"/>
+        <feBlend in="rg" in2="b2" mode="screen"/>
+      </filter>
+      <filter id="chromaB" x="-3%" y="-3%" width="106%" height="106%" color-interpolation-filters="sRGB">
+        <feColorMatrix in="SourceGraphic" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="r"/>
+        <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="g"/>
+        <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="b"/>
+        <feOffset in="r" dx="-5" dy="0" result="r2"/>
+        <feOffset in="b" dx="5" dy="0" result="b2"/>
+        <feBlend in="r2" in2="g" mode="screen" result="rg"/>
+        <feBlend in="rg" in2="b2" mode="screen"/>
+      </filter>
+    </defs>
+  </svg>
+  <div id="home" class="screen" hidden>
+    <div class="home-wrap">
+      <header class="hero">
+        <svg id="heroIsland" class="hero-island" role="img" aria-label="A small island of painted hex tiles"></svg>
+        <h1 class="wordmark">Hexlands</h1>
+        <p class="tag">Settle the island. Outbuild your friends.</p>
+        <p class="facts">17 maps &middot; 2 to 6 players &middot; bots fill empty seats</p>
+      </header>
+      <section class="paper home-card">
+        <label class="field">Your name
+          <input id="nameInput" maxlength="20" autocomplete="nickname" placeholder="Captain Hex">
+        </label>
+        <button id="createBtn" class="btn primary big">Start a new table</button>
+        <div class="or"><span>or sit down with friends</span></div>
+        <div class="join-row">
+          <input id="codeInput" maxlength="4" autocapitalize="characters" autocomplete="off" placeholder="CODE" aria-label="Room code">
+          <button id="joinBtn" class="btn big">Join</button>
+        </div>
+        <label class="check"><input type="checkbox" id="watchChk"> Watch only</label>
+        <div id="rejoin" class="rejoin" hidden></div>
+        <p id="homeErr" class="err" role="alert"></p>
+      </section>
+    </div>
+  </div>
+
+  <div id="lobby" class="screen" hidden>
+    <div class="lobby-wrap">
+      <div id="lobbyMain"></div>
+      <section class="paper chat-card">
+        <h3>Table talk</h3>
+        <div class="chatlist" id="chatListLobby"></div>
+        <form class="chatform" data-chat><input maxlength="300" placeholder="Say something…" autocomplete="off" aria-label="Chat message"><button class="btn">Send</button></form>
+      </section>
+    </div>
+  </div>
+
+  <div id="game" hidden>
+    <header id="topbar"></header>
+    <div id="playersBar"></div>
+    <main id="boardWrap">
+      <svg id="boardSvg" role="img" aria-label="Game board"></svg>
+      <svg id="compass" viewBox="-60 -62 120 124" aria-hidden="true">
+        <circle r="40" fill="none" stroke="currentColor" stroke-width="2.4"/>
+        <circle r="31" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2 3.2"/>
+        <path d="M0 -50 L8 0 L0 50 L-8 0Z" fill="currentColor"/>
+        <path d="M-50 0 L0 -8 L50 0 L0 8Z" fill="currentColor" opacity=".5"/>
+        <text y="-54" text-anchor="middle" font-size="14" font-weight="800" fill="currentColor" font-family="Georgia,serif">N</text>
+      </svg>
+      <div id="boardCtl">
+        <button class="btn icon" data-act="zoomIn" aria-label="Zoom in">+</button>
+        <button class="btn icon" data-act="zoomOut" aria-label="Zoom out">&minus;</button>
+        <button class="btn icon" data-act="zoomReset" aria-label="Reset view" title="Reset view">&#8962;</button>
+      </div>
+      <div id="hudTL" class="hud" aria-hidden="true"></div>
+      <div id="hudBR" class="hud" aria-hidden="true"></div>
+      <div id="banner"></div>
+      <div id="hexTip" role="tooltip"></div>
+      <div id="confirmBar" hidden></div>
+    </main>
+    <aside id="side">
+      <div class="tabs">
+        <button data-act="tab" data-tab="log" class="on">Chronicle</button>
+        <button data-act="tab" data-tab="chat">Chat <i id="chatDot" hidden></i></button>
+        <button data-act="closeSide" class="only-mobile">Close</button>
+      </div>
+      <div id="logList" class="scroll"></div>
+      <div id="chatPane" hidden>
+        <div class="chatlist scroll" id="chatListGame"></div>
+        <form class="chatform" data-chat><input maxlength="300" placeholder="Say something…" autocomplete="off" aria-label="Chat message"><button class="btn">Send</button></form>
+      </div>
+    </aside>
+    <footer id="tray"></footer>
+  </div>
+
+  <div id="fx" aria-hidden="true"></div>
+  <div id="modal" hidden></div>
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <script src="board.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

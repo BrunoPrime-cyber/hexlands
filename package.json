@@ -1,0 +1,19 @@
+{
+  "name": "hexlands",
+  "version": "1.0.0",
+  "description": "A private, original hex-island settling game for friends. All maps and options unlocked.",
+  "private": true,
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "test": "node --test test/",
+    "sim": "node test/sim.js 6",
+    "bundle": "node scripts/bundle.js",
+    "build:exe": "node scripts/build-exe.js",
+    "build:apk": "node android/build.js",
+    "build": "node scripts/build-exe.js && node android/build.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
