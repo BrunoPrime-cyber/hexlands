@@ -271,7 +271,7 @@ input::placeholder { color: #8c7a5c; }
 .hint { fill: rgba(255, 226, 150, 0.32); stroke: #ffe7a1; stroke-width: 0.05; pointer-events: none; }
 .hint-vertex { animation: pulse 1.1s ease-in-out infinite alternate; }
 .hint-edge { fill: none; stroke: rgba(255, 231, 161, 0.78); stroke-width: 0.2; stroke-linecap: round; animation: pulse 1.1s ease-in-out infinite alternate; }
-.hint-hex { fill: rgba(20, 10, 0, 0.42); stroke: #ffe7a1; stroke-dasharray: 0.12 0.1; stroke-width: 0.06; }
+.hint-hex { fill: rgba(20, 10, 0, 0.42); stroke: #ffe7a1; stroke-dasharray: 0.12 0.1; stroke-width: 0.06; pointer-events: all; cursor: pointer; }
 .hit { fill: transparent; stroke: transparent; stroke-width: 0.42; stroke-linecap: round; cursor: pointer; pointer-events: all; }
 @keyframes pulse { to { opacity: 0.4; } }
 .token.hot circle:nth-child(2) { fill: #ffe9a6; stroke: #d4881a; stroke-width: 0.08; animation: halo 1.1s ease-in-out 3; }
